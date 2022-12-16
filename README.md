@@ -1,14 +1,8 @@
 # Colleges Shiny App
 
-Deciding where to go to college can be one of the most consequential decisions a person will make in their lifetime.
+Deciding where to go to college can be one of the most consequential decisions a person will make in their lifetime. Many people chose where to go to college based on rankings from news organizations, but rankings reduce the quality of a school down to one number. By itself, rankings are not helpful in deciding which school is best for YOU. Instead, prospective students should prioritize fit when deciding where to go to college.
 
-Many people chose where to go to college based on rankings from news organizations, but rankings reduce the quality of a school down to one number.
-
-By itself, rankings are not helpful in deciding which school is best for YOU.
-Instead, prospective students should prioritize fit when deciding where to go to college.
-
-Evaluating fit requires customization which is something conventional school rankings don't provide.
-This app aims to aid prospective students in identifying and comparing colleges they may want to attend based on their unique preferences.
+Evaluating fit requires customization which is something conventional school rankings don't provide. This app aims to aid prospective students in identifying and comparing colleges they may want to attend based on their unique preferences.
 
 ## Data
 
