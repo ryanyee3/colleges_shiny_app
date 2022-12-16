@@ -12,5 +12,5 @@ The data used for this app comes from the following sources:
 * U.S. News & World Report National University Rankings via [Andrew G. Reiter](https://andyreiter.com/datasets/)
 * Crime Data
 
-Rankings and crime data can be found in the `data` folder. College Scorecard data must be downloaded from https://collegescorecard.ed.gov/data/. After downloading the data, open `.zip` file and rename folder as `scorecard`. Move this folder to `data` before running `clean_data.R`. A merged dataset used in the application is available in the `colleges.csv` which can be found in the `data` folder.)
+Rankings and crime data can be found in the `data` folder. College Scorecard data must be downloaded from https://collegescorecard.ed.gov/data/. After downloading the data, open `.zip` file and rename folder to `CollegeScorecard`. Move this folder to `data` before running `clean_data.R`. A merged dataset used in the application is available in the `colleges.csv` which can be found in the `data` folder.)
 
