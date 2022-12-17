@@ -4,6 +4,10 @@ Deciding where to go to college can be one of the most consequential decisions a
 
 Evaluating fit requires customization which is something conventional school rankings don't provide. This app aims to aid prospective students in identifying and comparing colleges they may want to attend based on their unique preferences.
 
+## App
+
+The shiny app is hosted [here](https://ryanyee3.shinyapps.io/colleges_app/).
+
 ## Data
 
 The data used for this app comes from the following sources:
