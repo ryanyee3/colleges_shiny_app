@@ -6,7 +6,7 @@ library(bslib)
 library(plotly)
 theme_set(theme_minimal())
 
-data <- read_csv("data/colleges_crime.csv") %>% 
+data <- read_csv("data/colleges.csv") %>% 
   mutate_at(vars(contains("ACTCM")), funs(as.integer)) %>%
   mutate(
     CITY = paste0(CITY, ", ", STABBR),
@@ -109,17 +109,12 @@ starplot <- function(data, schools){
 
 # Setting up data for star plot
 star_data_convert <- function(schools, star_stats){
-  stats_all = c("RANK_SCORE", "ADMIT_RATE", "UNDERGRAD_ENROLLMENT", 
-                "TUITION_AFFORDABILITY", "COST_AFFORDABILITY",
-                "COMPLETION_RATE", "ACT_MEDIAN", 
-                "NET_PRICE_AFFORDABILITY", "SAFETY_INDEX")
-  #stats_all <- c("RANK", "ADMIT_RATE", "UNDERGRAD_ENROLLMENT", "TUITION", "YEARLY_COST", "COMPLETION_RATE", "ACT_MEDIAN", "NET_PRICE", "SAFETY_INDEX")
-  stats_inv <- c("RANK_SCORE", "TUITION_AFFORDABILITY", "NET_PRICE_AFFORDABILITY", "COST_AFFORDABILITY")
+  stats_all = c("RANK", "ADMIT_RATE", "UNDERGRAD_ENROLLMENT", "TUITION",
+                "COMPLETION_RATE", "ACT_MEDIAN", "NET_PRICE")
+  stats_inv <- c("RANK", "TUITION", "NET_PRICE")
   
   # Convert selected stats into percentiles using all 2020 schools
   star_data <- data %>%
-    rename(RANK_SCORE = RANK, TUITION_AFFORDABILITY = TUITION, 
-           NET_PRICE_AFFORDABILITY = NET_PRICE, COST_AFFORDABILITY = YEARLY_COST) %>% 
     filter(YEAR == max(data$YEAR)) %>% 
     mutate(across(stats_all, function(x) ecdf(x)(x))) %>% 
     mutate(across(stats_inv, function(x) 1-x)) %>% 
@@ -141,20 +136,12 @@ star_data_convert <- function(schools, star_stats){
 }
 
 star_table_out <- function(data, schools, star_stats){
-  
-  data = data %>%
-    rename(RANK_SCORE = RANK, TUITION_AFFORDABILITY = TUITION, 
-           NET_PRICE_AFFORDABILITY = NET_PRICE, COST_AFFORDABILITY = YEARLY_COST) %>%
+  out <- data %>%
     select(NAME, star_stats) %>% 
     filter(NAME %in% {{schools}}) %>% 
     arrange(match(NAME, {{schools}}))
   
-  if("RANK_SCORE" %in% colnames(data)){data = data %>% rename(RANK = RANK_SCORE)}
-  if("TUITION_AFFORDABILITY" %in% colnames(data)){data = data %>% rename(TUITION = TUITION_AFFORDABILITY)}
-  if("NET_PRICE_AFFORDABILITY" %in% colnames(data)){data = data %>% rename(NET_PRICE = NET_PRICE_AFFORDABILITY)}
-  if("COST_AFFORDABILITY" %in% colnames(data)){data = data %>% rename(YEARLY_COST = COST_AFFORDABILITY)}
-  
-  data
+  return(out)
 }
 
 # Line plot function
@@ -163,7 +150,7 @@ lineplot = function(df, line_variable, schools){
     geom_line(data=df, aes(YEAR, .data[[line_variable]]), size = 1, alpha=0.8) +
     scale_x_continuous(breaks = min(df$YEAR):max(df$YEAR)) +
     scale_color_manual(values = c("#F8766D", "#00BFC4", "#7CAE00"), labels = {{schools}}) +
-    labs(x = "Year", y = line_variable,
+    labs(x = "", y = line_variable,
          title = paste0("Evolution of ", line_variable,
                         " (", min(df$YEAR), "-", max(df$YEAR), ")"), color = "") +
     theme(
@@ -172,7 +159,8 @@ lineplot = function(df, line_variable, schools){
       legend.position = "bottom"
     )
   ggplotly(p, tooltip = line_variable) %>%
-    style(hoveron = "fill")
+    style(hoveron = "fill") %>% 
+    layout(legend = list(orientation = 'h'))
 }
 
 # Setting up data for line plot (use same schools as in star plot)
@@ -229,17 +217,16 @@ ui <- navbarPage("College Ranking",
                             ),
                             fluidRow(
                               column(4, checkboxGroupInput("star_stats", "Select Starplot Stats (at least 3)", 
-                                                           c("RANK_SCORE", "ADMIT_RATE", "UNDERGRAD_ENROLLMENT", 
-                                                             "TUITION_AFFORDABILITY", "COST_AFFORDABILITY",
-                                                             "COMPLETION_RATE", "ACT_MEDIAN", 
-                                                             "NET_PRICE_AFFORDABILITY", "SAFETY_INDEX"),
-                                                           selected = c("RANK_SCORE","ADMIT_RATE","COST_AFFORDABILITY","SAFETY_INDEX"))),
+                                                           c("RANK", "ADMIT_RATE", "UNDERGRAD_ENROLLMENT", 
+                                                             "TUITION", "COMPLETION_RATE", "ACT_MEDIAN", 
+                                                             "NET_PRICE"),
+                                                           selected = c("RANK","ADMIT_RATE", "UNDERGRAD_ENROLLMENT"))),
                               column(8, plotOutput("starplot"))
                             ),
                             fluidRow(
                               column(4, selectInput("line_variable", "Select Time Series Variable", 
-                                                    c("RANK", "ADMIT_RATE", "UNDERGRAD_ENROLLMENT", "TUITION", "YEARLY_COST",
-                                                      "COMPLETION_RATE", "ACT_MEDIAN", "NET_PRICE", "SAFETY_INDEX"),
+                                                    c("RANK", "ADMIT_RATE", "UNDERGRAD_ENROLLMENT", "TUITION",
+                                                      "COMPLETION_RATE", "ACT_MEDIAN", "NET_PRICE"),
                                                     selected = c("ADMIT_RATE"))),
                               
                               column(8, plotlyOutput("lineplot")),
@@ -280,7 +267,7 @@ server <- function(input, output, session) {
       leaflet(options = leafletOptions(minZoom = 4)) %>% 
       addProviderTiles(providers$Stamen.TonerLite, options = providerTileOptions(noWrap = TRUE)) %>% 
       addCircles(lng = ~LONGITUDE, lat = ~LATITUDE, label = ~NAME, color = ~colorFactor(palette=c("#8BC3FF", "#2C3E51"), domain=selected)(selected)) %>% 
-      setView(lng = -93.85, lat = 37.45, zoom = 4) %>% 
+      setView(lng = -93.85, lat = 37.45, zoom = 1) %>% 
       setMaxBounds(lng1 = -40, lat1 = 10, lng2 = -160, lat2 = 60)
   })
   
