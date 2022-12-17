@@ -1,16 +1,21 @@
+
+# Libraries ---------------------------------------------------------------
+
 library(tidyverse)
 library(readxl)
 
-# get USNWR rankings data
-usnwr <- read_xlsx("data/usnwr.xlsx", skip = 1)
+# Data --------------------------------------------------------------------
 
-# get IDs from USNWR rankings data
+# load rankings data
+rankings <- read_xlsx("rankings.xlsx", skip = 1)
+
+# get IDs from rankings data
 # ID for PSU changes to 495767 in most recent scorecard data
-ID <- c(pull(usnwr, "IPEDS ID"), 495767)
+ID <- c(pull(rankings, "IPEDS ID"), 495767)
 
 # function to get scorecard data
 get_scorecard <- function(filename) {
-  YEAR <- str_replace(filename, "data/scorecard/", "") %>% 
+  YEAR <- str_replace(filename, "scorecard/", "") %>% 
     parse_number()
   
   scorecard <- read.csv(filename) %>% 
@@ -26,9 +31,11 @@ get_scorecard <- function(filename) {
 }
 
 # get scorecard data for past ten years
-filenames <- paste0("data/scorecard/MERGED", 2011:2020, "_", 12:21, "_PP.csv")
+filenames <- paste0("scorecard/MERGED", 2011:2020, "_", 12:21, "_PP.csv")
 data_list <- lapply(filenames, get_scorecard)
 scorecard <- bind_rows(data_list)
+
+# Clean -------------------------------------------------------------------
 
 # have all ten observations for PSU
 # Thomas Jefferson U combined with Philadelphia U in 2017
@@ -37,12 +44,12 @@ scorecard %>%
   filter(n() < 10) %>% 
   View()
 
-# change PSU ID to match USNWR rankings data
+# change PSU ID to match rankings data
 scorecard <- scorecard %>% 
   mutate(UNITID = replace(UNITID, UNITID == 495767, 214777))
 
-# combine both datasets and write file
-usnwr %>% 
+# combine data and write file
+rankings %>% 
   select(NAME = 1, UNITID = 2, as.character(2011:2020)) %>% 
   pivot_longer(3:12, names_to = "YEAR", values_to = "RANK") %>% 
   mutate(YEAR = as.double(YEAR)) %>% 
@@ -54,5 +61,5 @@ usnwr %>%
   group_by(UNITID) %>% 
   mutate(LATITUDE = LATITUDE[!is.na(LATITUDE)][1L],
          LONGITUDE = LONGITUDE[!is.na(LONGITUDE)][1L]) %>% 
-  write.csv("data/colleges.csv")
+  write.csv("colleges.csv")
                     
