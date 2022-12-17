@@ -6,7 +6,7 @@ library(bslib)
 library(plotly)
 theme_set(theme_minimal())
 
-data <- read_csv("data/colleges.csv") %>% 
+data <- read_csv("colleges.csv") %>% 
   mutate_at(vars(contains("ACTCM")), funs(as.integer)) %>%
   mutate(
     CITY = paste0(CITY, ", ", STABBR),
