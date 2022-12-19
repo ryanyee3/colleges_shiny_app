@@ -4,6 +4,10 @@ Deciding where to go to college can be one of the most consequential decisions a
 
 Evaluating fit requires customization which is something conventional school rankings don't provide. This app aims to aid prospective students in identifying and comparing colleges they may want to attend based on their unique preferences.
 
+## About
+
+This app was developed for [STAT 679](https://github.com/krisrs1128/stat679_code) final project. I worked with [Martino Boggs](https://github.com/tinoboggs), [Albert Dorador-Chalar](https://github.com/AlZero0), and [Shane Huang](https://github.com/shanehuang16) on this project. Our original repository can be found [here](https://github.com/tinoboggs/college-ranking). I created this repository so I could make a few editorial changes to the project.
+
 ## App
 
 The shiny app is hosted [here](https://ryanyee3.shinyapps.io/colleges_app/).
