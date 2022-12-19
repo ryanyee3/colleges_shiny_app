@@ -19,5 +19,5 @@ Rankings data can be found in the `data` folder as `rankings.xlsx`. College Scor
 
 ## About
 
-This app was developed for [STAT 679](https://github.com/krisrs1128/stat679_code) final project. I worked with [Martino Boggs](https://github.com/tinoboggs), [Albert Dorador-Chalar](https://github.com/AlZero0), and [Shane Huang](https://github.com/shanehuang16) on this project. Our original repository can be found [here](https://github.com/tinoboggs/college-ranking). I created this repository so I could make a few editorial changes to the project.
+This app was developed for [STAT 679](https://github.com/krisrs1128/stat679_code) final project. I worked with [Martino Boggs](https://github.com/tinoboggs), [Albert Dorador-Chalar](https://github.com/AlZero0), and [Shane Huang](https://github.com/shanehuang16) on this project. Our original repository can be found [here](https://github.com/tinoboggs/college-ranking). I created this repository so I could make some editorial changes to the project.
 
